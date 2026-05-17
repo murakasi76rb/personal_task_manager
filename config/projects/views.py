@@ -30,11 +30,11 @@ def project_create(request:HttpRequest):
 
 
 def project_detail(request:HttpRequest, project_id:int):
-    project = get_object_or_404(Project, pk=project_id, owner=request.user)
-    tasks = project.tasks.all() #type: ignore
+    queryset  = (Project.objects.prefetch_related('tasks'))
+    project = get_object_or_404(queryset, pk=project_id, owner=request.user)
+    
     context = {
         'project': project,
-        'tasks': tasks
     }
 
     return render(request, 'projects/detail.html', context)
