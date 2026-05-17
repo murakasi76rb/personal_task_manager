@@ -5,11 +5,14 @@ from projects.forms import ProjectForm
 
 
 def project_list(request: HttpRequest):
-    projects = Project.objects.filter(owner=request.user)
+    queryset = (Project.objects.prefetch_related('tasks'))
+    projects = queryset.filter(owner=request.user)
     context = {
         'projects': projects
     }
+    
     return render(request, 'projects/list.html', context)
+
 
 
 def project_create(request:HttpRequest):
