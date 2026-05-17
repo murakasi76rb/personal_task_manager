@@ -5,7 +5,11 @@ from tasks.forms import TaskForm
 from projects.models import Project
 
 def task_detail(request:HttpRequest, task_id:int):
-    task = get_object_or_404(Task, pk=task_id, project__owner=request.user)
+    queryset = (Task.objects.select_related(
+        'project',
+        'project__owner'
+    ))
+    task = get_object_or_404(queryset, pk=task_id, project__owner=request.user)
     context = {
         'task': task
     }
