@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Base page{% endblock title %}</title>
+</head>
+
+<body>
+    <header> Hello {{request.user }}</header>
+    <main>
+        <section>
+            {% include "partials/nav.html" %}
+        </section>
+        <section>
+            {% block content %}{% endblock content %}
+        </section>
+
+    </main>
+    <footer>
+        <p>
+            &#169 2026 murakasi
+        </p>
+    </footer>
+</body>
+
+</html>
