@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Update {{form.title }}{% endblock title %}
+{% block content %}
+{% include "ppartials/form.html" with form=form button_text="Update" %}
+{% endblock content %}
