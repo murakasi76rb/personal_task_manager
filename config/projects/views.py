@@ -5,19 +5,21 @@ from projects.forms import ProjectForm
 
 
 def project_list(request: HttpRequest):
-    projects = Project.objects.filter(owner=request.user)
+    projects = Project.objects.filter(owner=request.user).prefetch_related('tasks')
     context = {
         'projects': projects
     }
+    
     return render(request, 'projects/list.html', context)
+
 
 
 def project_create(request:HttpRequest):
     if request.method == 'POST':
         form = ProjectForm(request.POST, owner=request.user)
         if form.is_valid():
-            form.save()
-            return redirect('projects:list')
+            project = form.save()
+            return redirect('projects:detail', project_id=project.id)
     else:
         form = ProjectForm(owner=request.user)
     context = {
@@ -27,23 +29,23 @@ def project_create(request:HttpRequest):
 
 
 def project_detail(request:HttpRequest, project_id:int):
-    project = get_object_or_404(Project, pk=project_id, owner=request.user)
-    tasks = project.tasks.all() #type: ignore
+    queryset  = (Project.objects.prefetch_related('tasks'))
+    project = get_object_or_404(queryset, pk=project_id, owner=request.user)
+    
     context = {
         'project': project,
-        'tasks': tasks
     }
 
     return render(request, 'projects/detail.html', context)
 
 
-def projects_update(request:HttpRequest, project_id:int):
+def project_update(request:HttpRequest, project_id:int):
     project = get_object_or_404(Project, pk=project_id, owner=request.user)
     if request.method == 'POST':
         form = ProjectForm(request.POST, instance=project, owner=request.user)
         if form.is_valid():
             form.save()
-            return redirect('projects:list')
+            return redirect('projects:detail', project_id=project.id)
     else:
         form = ProjectForm(instance=project, owner=request.user)
 

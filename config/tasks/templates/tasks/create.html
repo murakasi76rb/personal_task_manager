@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Create Task{% endblock title %}
+{% block content %}
+<h2>
+    Create Task for "{{ project.title }}"
+</h2>
+{% include "partials/form.html" with form=form button_text="Create" %}
+<section>
+    <a href="{% url 'projects:detail' project.id %}">
+        Cancel
+    </a>
+</section>
+{% endblock content %}

@@ -5,11 +5,10 @@ from tasks.forms import TaskForm
 from projects.models import Project
 
 def task_detail(request:HttpRequest, task_id:int):
-    queryset = (Task.objects.select_related(
+    task = get_object_or_404(Task.objects.select_related(
         'project',
         'project__owner'
-    ))
-    task = get_object_or_404(queryset, pk=task_id, project__owner=request.user)
+    ), pk=task_id, project__owner=request.user)
     context = {
         'task': task
     }
@@ -21,7 +20,7 @@ def task_create(request:HttpRequest, project_id:int):
         form = TaskForm(request.POST, project=project)
         if form.is_valid():
             form.save()
-            return redirect('projects:detail', project_id=project_id)
+            return redirect('projects:detail', project_id=project.pk)
     else:
         form = TaskForm(project=project)
     context = {
@@ -32,7 +31,9 @@ def task_create(request:HttpRequest, project_id:int):
 
 
 def task_update(request:HttpRequest, task_id:int):
-    task = get_object_or_404(Task, pk=task_id, project__owner=request.user)
+    task = get_object_or_404(Task.objects.select_related('project'), 
+                             pk=task_id, 
+                             project__owner=request.user)
     project = task.project
     if request.method == 'POST':
         form = TaskForm(request.POST, instance=task, project=project)

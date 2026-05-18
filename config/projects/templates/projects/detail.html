@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{project.title }}{% endblock title %}
+{% block content %}
+<section>
+    <h3>Project: {{project.title }}</h3>
+    <p>Owner: {{project.owner }} </p>
+    <p>Description: {{ project.description }}</p>
+    <p>Created: {{ project.created_at|date:"Y-m-d H:i" }}</p>
+</section>
+<hr>
+<section>
+    <h3>Tasks</h3>
+    <a href="{% url 'tasks:create' project.id%}">+ Create Task</a>
+    <ul>
+        {% for task in project.tasks.all %}
+        <li>
+            <a href="{% url 'tasks:detail' task.id %}">{{ task.title }}</a>
+        </li>
+        {% empty %}
+        <li>
+            Not yet task in this project
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock content %}
