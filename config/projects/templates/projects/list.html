@@ -3,7 +3,7 @@
 {% block content %}
 {% if projects %}
 {% for project in projects %}
-<div>
+<section>
    <h4>
     <a href="{% url 'projects:detail' project.id %}">{{ project.title}}</a>
    </h4>
@@ -17,7 +17,7 @@
     </li>
     {% endfor %}
    </ul>
-</div>
+</section>
 {% endfor %}
 {% else %}
 <p>Emty list</p>
