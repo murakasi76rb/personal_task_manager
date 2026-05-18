@@ -31,7 +31,9 @@ def task_create(request:HttpRequest, project_id:int):
 
 
 def task_update(request:HttpRequest, task_id:int):
-    task = get_object_or_404(Task.objects.select_related('project'), pk=task_id, project__owner=request.user)
+    task = get_object_or_404(Task.objects.select_related('project'), 
+                             pk=task_id, 
+                             project__owner=request.user)
     project = task.project
     if request.method == 'POST':
         form = TaskForm(request.POST, instance=task, project=project)
