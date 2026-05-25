@@ -8,7 +8,12 @@
 </head>
 
 <body>
-    <header> Hello {{request.user }}</header>
+    <header> 
+        <h2>
+            Hello {{request.user }}
+        </h2>
+    </header>
+
     <main>
         <section>
             {% include "partials/nav.html" %}
@@ -16,7 +21,11 @@
         <section>
             {% block content %}{% endblock content %}
         </section>
-
+        <section>
+            <a href="{% url 'users:logout' %}">
+                Logout
+            </a>
+        </section>
     </main>
     <footer>
         <p>
